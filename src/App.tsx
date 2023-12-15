@@ -42,6 +42,7 @@ function App() {
         .insert({ message: message(), username: username() })
         .select();
 
+      setMessage("")
       refetch();
 
       if (error) {
