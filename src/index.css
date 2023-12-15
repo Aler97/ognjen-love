@@ -17,3 +17,7 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+textarea::placeholder, input::placeholder{
+  font-size: 1.3em;
+}

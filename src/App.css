@@ -15,6 +15,47 @@
   font-size: 1.5em;
 }
 
+.inputFields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1em;
+  margin: 0 1em;
+}
+
+.inputMessageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+#charCount {
+  align-self: flex-end;
+  font-size: 1em;
+}
+
+#inputMessage {
+  width: 50em;
+  height: 10em;
+  padding: 1em;
+}
+
+#inputUsername {
+  padding: 0.8em;
+  width: 28em;
+}
+
+#sendButton {
+  padding: 0.7em 2em;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  cursor: pointer;
+}
+
+#sendButton:disabled {
+  cursor: not-allowed;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -33,14 +74,17 @@
 }
 
 .message {
-  width: 200px;
-  padding: 10px;
+  width: 23em;
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
   color: black;
   border-radius: 10px;
   background-color: #e0e0e0;
   margin-bottom: 10px;
   position: relative;
-  word-wrap: break-word;
+  flex-wrap: wrap;
+  font-weight: 500;
 }
 
 .message::after {
@@ -55,5 +99,21 @@
 }
 
 .username {
-  justify-self: right;
+  align-self: flex-end;
+}
+
+.createAt {
+  align-self: flex-end;
+}
+
+@media only screen and (max-width: 767px) {
+  #inputMessage {
+    width: 20em;
+    height: 8em; /* Adjust height for mobile layout */
+  }
+
+  #inputUsername {
+    padding: 0.8em;
+    width: 18em;
+  }
 }
