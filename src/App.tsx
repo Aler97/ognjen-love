@@ -1,23 +1,21 @@
 import {
   For,
+  Match,
   Show,
-  createEffect,
+  Switch,
   createResource,
   createSignal,
 } from "solid-js";
 import "./App.css";
 import { supabase } from "./utils/supabaseClient";
-
-interface Message {
-  id: number;
-  created_at: string;
-  message: string;
-  username: string;
-}
+import toast, { Toaster } from "solid-toast";
 
 async function getMessages() {
-  const { data } = await supabase.from("publicMessages").select();
-  return data as Message[];
+  const supabaseObject = await supabase
+    .from("publicMessages")
+    .select()
+    .order("created_at", { ascending: false });
+  return supabaseObject;
 }
 
 function NoMessages() {
@@ -28,45 +26,66 @@ function NoMessages() {
   );
 }
 
+function Loading() {
+  return <div class="loader"></div>;
+}
+
 function App() {
-  const [allMessages, { refetch }] = createResource<Message[]>(getMessages);
-  const [messages, setMessages] = createSignal<Message[]>([]);
+  const [allMessages, { refetch }] = createResource(getMessages);
   const [message, setMessage] = createSignal<string>("");
   const [username, setUsername] = createSignal<string>("");
   const [charCount, setCharCount] = createSignal(0);
 
+  function ErrorOccured() {
+    return (
+      <div style={{ "text-align": "center", color: "#f9423a" }}>
+        <h3>
+          It appears that an error has occurred, which is unfortunate. However,
+          it will likely be resolved shortly. In the meantime, feel free to
+          consider a message you plan to send to Ognjen. &#128522;
+        </h3>
+        <button onclick={() => refetch()} style={{ padding: "0.4em" }}>
+          Reload
+        </button>
+      </div>
+    );
+  }
+
+  const errorNoti = (): void => {
+    toast.error("An error occured...", {
+      duration: 1500,
+      position: "top-center",
+    });
+  };
+
+  const successNoti = (): void => {
+    toast.success("Success!", { duration: 1500, position: "top-center" });
+  };
+
   async function sendMessage() {
-    if (message() !== "") {
-      const { error } = await supabase
-        .from("publicMessages")
+    if (message() !== "" && message().length < 201) {
+      const { data, error } = await supabase
+        .from("publicMessage")
         .insert({ message: message(), username: username() })
         .select();
 
-      setMessage("")
-      refetch();
-
-      if (error) {
-        console.log(error);
+      if (data) {
+        successNoti();
+        setMessage("");
+        refetch();
+      } else if (error) {
+        errorNoti();
       }
-    }else{
-      alert('You need to write something in order to post it.')
+      return;
+    } else {
+      alert("You need to write something in order to post it.");
     }
   }
 
   const updateCharCount = (e: any): void => {
     setCharCount(e.target.value.length);
+    console.log(allMessages);
   };
-
-  createEffect(() => {
-    let msgs = allMessages();
-    if (messages().length === 0) {
-      msgs !== undefined && msgs.length > 0
-        ? setMessages((prev) => [...prev, msgs[msgs.length - 1]])
-        : null;
-    } else {
-      msgs !== undefined ? setMessages([...msgs]) : null;
-    }
-  });
 
   return (
     <>
@@ -102,7 +121,9 @@ function App() {
           <button
             disabled={message()! === ""}
             id="sendButton"
-            onclick={() => sendMessage()}
+            onclick={() => {
+              sendMessage();
+            }}
           >
             SEND!
           </button>
@@ -110,33 +131,40 @@ function App() {
       </div>
       <main class="container">
         <h3>Your lovley messages:</h3>
-        <Show when={messages().length > 0} fallback={<NoMessages />}>
-          <div class="messagesContainer">
-            <For each={messages()}>
-              {(message, _i) => (
-                <div class="message">
-                  <p class="createAt">
-                    {new Date(message.created_at).toLocaleString()}
-                  </p>
-                  <p
-                    style={{
-                      "align-self": "center",
-                      "max-width": "80%",
-                      "word-wrap": "break-word",
-                      "font-size": "1.2em",
-                    }}
-                  >
-                    {message.message}
-                  </p>
-                  <p class="username">
-                    By:{" "}
-                    {message.username !== "" ? message.username : "Anonymous"}
-                  </p>
-                </div>
-              )}
-            </For>
-          </div>
+        <Show
+          when={
+            allMessages.state !== "pending" &&
+            allMessages.state !== "refreshing"
+          }
+          fallback={<Loading />}
+        >
+          <Switch fallback={<ErrorOccured />}>
+            <Match when={allMessages()?.data?.length! > 0}>
+              <div class="messagesContainer">
+                <For each={allMessages()?.data}>
+                  {(message, _i) => (
+                    <div class="message">
+                      <p class="createAt">
+                        {new Date(message.created_at).toLocaleString()}
+                      </p>
+                      <p class="messageText">{message.message}</p>
+                      <p class="username">
+                        By:{" "}
+                        {message.username !== ""
+                          ? message.username
+                          : "Anonymous"}
+                      </p>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </Match>
+            <Match when={allMessages()?.data?.length === 0}>
+              <NoMessages />
+            </Match>
+          </Switch>
         </Show>
+        <Toaster />
       </main>
     </>
   );
