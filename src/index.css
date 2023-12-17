@@ -5,6 +5,8 @@
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #222831;
+  --nice-red: #820300;
+  --nice-grey: #393e46;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,24 +26,24 @@ input::placeholder {
 }
 
 textarea {
-  background-color: #393e46;
-  border: 1px solid #d65a31;
+  background-color: var(--nice-grey);
+  border: 1px solid var(--nice-red);
   border-radius: 5px;
 }
 
 input {
-  background-color: #393e46;
-  border: 1px solid #d65a31;
+  background-color: var(--nice-grey);
+  border: 1px solid var(--nice-red);
   border-radius: 5px;
 }
 
 button {
-  background-color: #393e46;
-  border: 1px solid #d65a31;
+  background-color: var(--nice-red);
+  border: 1px solid var(--nice-grey);
   border-radius: 5px;
 }
 
 button:hover {
-  background-color: #d65a31;
-  border: 1px solid #393e46;
+  background-color: var(--nice-grey);
+  border: 1px solid var(--nice-red);
 }

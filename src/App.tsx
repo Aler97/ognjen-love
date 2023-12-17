@@ -147,7 +147,7 @@ function App() {
         </div>
       </div>
       <main class="container">
-        <h2>Your lovley messages:</h2>
+        <h2>Your lovely messages:</h2>
         <Show
           when={
             allMessages.state !== "pending" &&
@@ -166,7 +166,7 @@ function App() {
                       </p>
                       <p class="messageText">{message.message}</p>
                       <p class="username">
-                        By:{" "}
+                        Sent by:{" "}
                         {message.username !== ""
                           ? message.username
                           : "Anonymous"}

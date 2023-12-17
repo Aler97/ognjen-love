@@ -82,13 +82,16 @@
   justify-content: center;
   padding: 1em;
   color: black;
-  border: 1px solid #d65a31;
+  border: 3px solid var(--nice-red);
   border-radius: 10px;
   background-color: #eeeeee;
   margin-bottom: 10px;
   position: relative;
   flex-wrap: wrap;
   font-weight: 500;
+  box-shadow: -2px 10px 20px -2px rgba(0, 0, 0, 0.84);
+  -webkit-box-shadow: -2px 10px 20px -2px rgba(0, 0, 0, 0.84);
+  -moz-box-shadow: -2px 10px 20px -2px rgba(0, 0, 0, 0.84);
 }
 
 .messageText {
@@ -101,11 +104,15 @@
 .username {
   align-self: flex-end;
   text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--nice-red);
 }
 
 .createAt {
   align-self: flex-end;
   text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--nice-red);
 }
 
 .loader {
