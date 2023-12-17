@@ -82,9 +82,9 @@
   justify-content: center;
   padding: 1em;
   color: black;
-  border: 1px solid #D65A31;
+  border: 1px solid #d65a31;
   border-radius: 10px;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   margin-bottom: 10px;
   position: relative;
   flex-wrap: wrap;
@@ -150,7 +150,7 @@
   width: 80%;
   max-width: 38em;
   color: black;
-  text-align:center;
+  text-align: center;
   font-size: 2em;
 }
 
@@ -173,20 +173,29 @@
 
 @media only screen and (max-width: 767px) {
   #inputMessage {
-    width: 20em;
+    width: 300px;
     height: 8em;
   }
 
   #inputUsername {
     padding: 0.8em;
-    width: 18em;
+    width: 280px;
   }
 }
 
-
 @media only screen and (max-width: 350px) {
-  .message{
+  .message {
     width: 30px;
     margin: auto;
+  }
+
+  #inputMessage {
+    width: 200px;
+    height: 8em;
+  }
+
+  #inputUsername {
+    padding: 0.8em;
+    width: 150px;
   }
 }
