@@ -197,6 +197,10 @@
     padding: 0.8em;
     width: 280px;
   }
+
+  .modal-content{
+    font-size: 1em
+  }
 }
 
 @media only screen and (max-width: 350px) {
