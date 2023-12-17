@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: 2em;
   align-items: center;
   text-align: center;
   padding: 0 10px 0 10px;
@@ -104,14 +105,14 @@
 .username {
   align-self: flex-end;
   text-decoration: underline;
-  text-decoration-style: wavy;
+  text-decoration-style: dotted;
   text-decoration-color: var(--nice-red);
 }
 
 .createAt {
   align-self: flex-end;
   text-decoration: underline;
-  text-decoration-style: wavy;
+  text-decoration-style: dotted;
   text-decoration-color: var(--nice-red);
 }
 
@@ -153,7 +154,8 @@
   transform: translate(-50%, -50%);
   background-color: #fefefe;
   padding: 1em;
-  border: 1px solid #888;
+  border: 1px solid var(--nice-red);
+  border-radius: 10px;
   width: 80%;
   max-width: 38em;
   color: black;
@@ -170,6 +172,13 @@
   cursor: pointer;
   padding: 0;
   margin: 0;
+}
+
+.infoButton {
+  position: absolute;
+  top: 1.1em;
+  right: 1.1em;
+  cursor: pointer;
 }
 
 @keyframes l3 {

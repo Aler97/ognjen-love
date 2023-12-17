@@ -11,6 +11,7 @@ import {
 import "./App.css";
 import { supabase } from "./utils/supabaseClient";
 import toast, { Toaster } from "solid-toast";
+import { IoInformationCircleOutline } from "solid-icons/io";
 
 async function getMessages() {
   const supabaseObject = await supabase
@@ -38,6 +39,7 @@ function App() {
   const [username, setUsername] = createSignal<string>("");
   const [charCount, setCharCount] = createSignal(0);
   const [openModal, setOpenModal] = createSignal(false);
+  const [openModalInfo, setOpenModalInfo] = createSignal(false);
 
   onMount(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -48,8 +50,16 @@ function App() {
   });
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === "Escape" && openModal()) {
-      setOpenModal(false);
+    if (event.key === "Escape") {
+      if (openModal()) {
+        setOpenModal(false);
+        return;
+      } else if (openModalInfo()) {
+        setOpenModalInfo(false);
+        return;
+      } else {
+        return null;
+      }
     }
   }
 
@@ -106,6 +116,14 @@ function App() {
 
   return (
     <>
+      <div
+        class="infoButton"
+        onclick={() => {
+          setOpenModalInfo(true);
+        }}
+      >
+        <IoInformationCircleOutline size={40} color="white" />
+      </div>
       <div class="introduction">
         <h1>Has Ognjen found love yet? No &#x1F61E;</h1>
         <p>
@@ -197,6 +215,31 @@ function App() {
                 This site does not collect any user data whatsoever. Everything
                 is completely anonymous.
               </p>
+            </div>
+          </div>
+        </Show>
+        <Show when={openModalInfo() === true} fallback={null}>
+          <div class="modal" id="myModal">
+            <div class="modal-content">
+              <p
+                class="close"
+                onclick={() => {
+                  setOpenModalInfo(false);
+                }}
+              >
+                &times;
+              </p>
+              <h1>Info:</h1>
+              <p>
+                This is a simple website created with the aim of learning the
+                basics of Supabase and SolidJS during the Supabase hackathon.{" "}
+              </p>
+              <p>
+                How to use: Enter a supportive message for Ognjen, input your
+                username (if you don't enter one, the message will be marked as
+                sent by: anonymous) and click send. Hopefully, you should see your message pop up.
+              </p>
+              <h4>Be polite and be good people.</h4>
             </div>
           </div>
         </Show>
