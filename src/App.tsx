@@ -5,6 +5,8 @@ import {
   Switch,
   createResource,
   createSignal,
+  onCleanup,
+  onMount,
 } from "solid-js";
 import "./App.css";
 import { supabase } from "./utils/supabaseClient";
@@ -35,6 +37,21 @@ function App() {
   const [message, setMessage] = createSignal<string>("");
   const [username, setUsername] = createSignal<string>("");
   const [charCount, setCharCount] = createSignal(0);
+  const [openModal, setOpenModal] = createSignal(false);
+
+  onMount(() => {
+    window.addEventListener("keydown", handleKeyDown);
+  });
+
+  onCleanup(() => {
+    window.removeEventListener("keydown", handleKeyDown);
+  });
+
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape" && openModal()) {
+      setOpenModal(false);
+    }
+  }
 
   function ErrorOccured() {
     return (
@@ -53,19 +70,19 @@ function App() {
 
   const errorNoti = (): void => {
     toast.error("An error occured...", {
-      duration: 1500,
+      duration: 2000,
       position: "top-center",
     });
   };
 
   const successNoti = (): void => {
-    toast.success("Success!", { duration: 1500, position: "top-center" });
+    toast.success("Success!", { duration: 2000, position: "top-center" });
   };
 
   async function sendMessage() {
     if (message() !== "" && message().length < 201) {
       const { data, error } = await supabase
-        .from("publicMessage")
+        .from("publicMessages")
         .insert({ message: message(), username: username() })
         .select();
 
@@ -130,7 +147,7 @@ function App() {
         </div>
       </div>
       <main class="container">
-        <h3>Your lovley messages:</h3>
+        <h2>Your lovley messages:</h2>
         <Show
           when={
             allMessages.state !== "pending" &&
@@ -164,8 +181,38 @@ function App() {
             </Match>
           </Switch>
         </Show>
+        <Show when={openModal() === true} fallback={null}>
+          <div class="modal" id="myModal">
+            <div class="modal-content">
+              <p
+                class="close"
+                onclick={() => {
+                  setOpenModal(false);
+                }}
+              >
+                &times;
+              </p>
+              <h1>Privacy Policy</h1>
+              <p>
+                This site does not collect any user data whatsoever. Everything
+                is completely anonymous.
+              </p>
+            </div>
+          </div>
+        </Show>
         <Toaster />
       </main>
+      <section class="footer">
+        <p>Developed with &#x2764;&#xFE0F; for Ognjen</p>
+        <p
+          onclick={() => {
+            setOpenModal(true);
+          }}
+          style={{ "text-decoration": "underline", cursor: "pointer" }}
+        >
+          Privacy policy
+        </p>
+      </section>
     </>
   );
 }
